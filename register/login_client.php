@@ -27,20 +27,11 @@
 						<li class="nav-item">
 							<a href="../apply/index.php" class="nav-link">Home</a>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Dropdown
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="./register_client.php">Sign Up</a></li>
-							</ul>
-						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
-
 
 	<div class="container">
 		<div class="row py-5 mt-4 align-items-center">
@@ -54,18 +45,34 @@
 			<div class="col-md-7 col-lg-6 ml-auto">
 				<form method="POST">
 					<div class="row">
+
 						<!-- Email Address -->
 						<div class="input-group col-lg-12 mb-4">
-							<input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md" autocomplete="off">
+							<input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md" required>
 						</div>
+
 						<!-- Password -->
 						<div class="input-group col-lg-6 mb-4">
-							<input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md" autocomplete="off">
+							<input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
+						</div>
+
+						<!-- Password Error Message -->
+						<div id="passErr" class="input-group col-lg-6 mb-4" style="display: none;">
+							<p class="alert alert-danger" role="alert">
+								<strong>Incorrect Password. Please Try Again!</strong>
+							</p>
+						</div>
+
+						<!-- Record Not Found Error Message-->
+						<div id="recErr" class="input-group col-lg-6 mb-4" style="display: none;">
+							<p class="alert alert-danger" role="alert">
+								<strong>Email Address Is Not Registered. Please <a href="register_client.php">Create Account</a></strong>
+							</p>
 						</div>
 
 						<!-- Submit Button -->
 						<div class="form-group col-lg-12 mx-auto mb-0">
-							<button href="#" class="btn btn-primary btn-block py-2 w-100" type="submit">
+							<button href="#" class="btn btn-primary btn-block py-2 w-100" type="submit" name="submit">
 								<span class="font-weight-bold">Login</span>
 							</button>
 						</div>
@@ -76,11 +83,11 @@
 							<span class="px-2 small text-muted font-weight-bold text-muted">OR</span>
 							<div class="border-bottom w-100 mr-5"></div>
 						</div>
+
 						<!-- Already Registered -->
 						<div class="text-center w-100">
-							<p class="text-muted font-weight-bold">Not Registered? <a href="login_client.php" class="text-primary ml-2">Create Account</a></p>
+							<p class="text-muted font-weight-bold">Not Registered? <a href="register_client.php" class="text-primary ml-2">Create Account</a></p>
 						</div>
-
 					</div>
 				</form>
 			</div>
@@ -97,6 +104,28 @@
 			});
 		});
 	</script>
+	<?php
+	if (isset($_POST['submit'])) {
+		try {
+			require_once '../dbConfig.php';
+			$sql = "Select * From Clients Where email = :email";
+			$statement = $dbConnection->prepare($sql);
+			$statement->execute(array(':email' => $_POST['email']));
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+			if ($row != NULL) {
+				if ($_POST['password'] == $row['Password']) {
+					echo '<script type="text/javascript">location.href = "../apply/index.php";</script>';
+				} else {
+					echo '<script>document.getElementById("passErr").style.display = "inline";</script>';
+				}
+			} else {
+				echo '<script>document.getElementById("recErr").style.display = "inline";</script>';
+			}
+		} catch (Exception $e) {
+			echo 'Exception :' . $e;
+		}
+	}
+	?>
 </body>
 
 </html>

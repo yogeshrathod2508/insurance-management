@@ -48,6 +48,19 @@ CREATE TABLE `insurance` (
   `TimeStamp` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+--
+-- Table structure for table `clients`
+--
+
+CREATE TABLE `clients` (
+  `ID` int(11) NOT NULL,
+  `Email` varchar(255) NOT NULL,
+	`Username` varchar(255) NOT NULL,
+  `Mobile` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -59,6 +72,12 @@ ALTER TABLE `insurance`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `clients`
+--
+ALTER TABLE `clients`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -67,6 +86,12 @@ ALTER TABLE `insurance`
 --
 ALTER TABLE `insurance`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `clients`
+--
+ALTER TABLE `clients`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

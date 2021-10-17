@@ -27,28 +27,11 @@
 						<li class="nav-item">
 							<a href="../apply/index.php" class="nav-link">Home</a>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Dropdown
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="#">Login</a></li>
-							</ul>
-						</li>
 					</ul>
-					<!-- <ul class="navbar-nav me-0 mb-2 mb-lg-0">
-						<li class="nav-item mr-4">
-							<button class="btn btn-outline-success">Login</button>
-						</li>&nbsp;&nbsp;&nbsp;&nbsp;
-						<li class="nav-item">
-							<button class="btn btn-outline-success">Sign Up</button>
-						</li>
-					</ul> -->
 				</div>
 			</div>
 		</nav>
 	</header>
-
 
 	<div class="container">
 		<div class="row py-5 mt-4 align-items-center">
@@ -62,38 +45,54 @@
 			<div class="col-md-7 col-lg-6 ml-auto">
 				<form method="POST">
 					<div class="row">
+
 						<!-- Email Address -->
 						<div class="input-group col-lg-12 mb-4">
-							<input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md" autocomplete="off">
+							<input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md" required>
 						</div>
+
 						<!-- Username -->
 						<div class="input-group col-lg-12 mb-4">
-							<input id="username" type="text" name="username" placeholder="Username" class="form-control bg-white border-left-0 border-md" autocomplete="off">
+							<input id="username" type="text" name="username" placeholder="Username" class="form-control bg-white border-left-0 border-md" required>
 						</div>
 
 						<!-- Phone Number -->
 						<div class="input-group col-lg-12 mb-4">
 							<select id="countryCode" name="countryCode" style="max-width: 80px" class="custom-select form-control bg-white border-left-0 border-md h-100 font-weight-bold text-muted">
-								<option value="">+91</option>
-								<option value="">+510</option>
-								<option value="">+49</option>
+								<option value="+91">+91</option>
+								<option value="+510">+510</option>
+								<option value="+49">+49</option>
 							</select>
-							<input id="phoneNumber" type="tel" name="phone" placeholder="Phone Number" class="form-control bg-white border-md border-left-0 pl-3">
-						</div>.
+							<input id="phoneNumber" type="tel" name="phone" placeholder="Phone Number" class="form-control bg-white border-md border-left-0 pl-3" required>
+						</div>
 
 						<!-- Password -->
 						<div class="input-group col-lg-6 mb-4">
-							<input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md">
+							<input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md" required>
 						</div>
 
 						<!-- Password Confirmation -->
 						<div class="input-group col-lg-6 mb-4">
-							<input id="passwordConfirmation" type="text" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md">
+							<input id="passwordConfirmation" type="text" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
+						</div>
+
+						<!-- Password Confirmation Error Message -->
+						<div id="passErr" class="input-group col-lg-6 mb-4" style="display: none;">
+							<p class="alert alert-danger" role="alert">
+								<strong>Password Didn't Match. Please Try Again!</strong>
+							</p>
+						</div>
+
+						<!-- Registration Confirmation Message -->
+						<div id="regConfirm" class="input-group col-lg-6 mb-4" style="display: none;">
+							<p class="alert alert-success" role="alert">
+								<strong>Client Registeration Successful. Redirecting To Login Page In 5 Seconds</strong>
+							</p>
 						</div>
 
 						<!-- Submit Button -->
 						<div class="form-group col-lg-12 mx-auto mb-0">
-							<button href="#" class="btn btn-primary btn-block py-2 w-100" type="submit">
+							<button href="#" class="btn btn-primary btn-block py-2 w-100" type="submit" name="submit" onclick="matchPassword()">
 								<span class="font-weight-bold">Create your account</span>
 							</button>
 						</div>
@@ -104,11 +103,11 @@
 							<span class="px-2 small text-muted font-weight-bold text-muted">OR</span>
 							<div class="border-bottom w-100 mr-5"></div>
 						</div>
+
 						<!-- Already Registered -->
 						<div class="text-center w-100">
 							<p class="text-muted font-weight-bold">Already Registered? <a href="login_client.php" class="text-primary ml-2">Login</a></p>
 						</div>
-
 					</div>
 				</form>
 			</div>
@@ -125,6 +124,29 @@
 			});
 		});
 	</script>
+	<?php
+	if (isset($_POST['submit'])) {
+		if ($_POST["password"] === $_POST["confirm_password"]) {
+			try {
+				require_once '../dbConfig.php';
+				$sql = "Insert Into Clients (Email, Username, Mobile, Password) Values (:email, :username, :mobno, :pass)";
+				$statement = $dbConnection->prepare($sql);
+				$statement->execute([
+					':email' => $_POST['email'],
+					':username' => $_POST['username'],
+					':mobno' => $_POST['countryCode'] . " " . $_POST['phone'],
+					':pass' => $_POST['password'],
+				]);
+			} catch (Exception $e) {
+				echo 'Exception :' . $e;
+			}
+			echo '<script>document.getElementById("regConfirm").style.display = "inline";</script>';
+			echo '<script type="text/javascript">window.setTimeout(function(){window.location.href = "login_client.php";}, 5000);</script>';
+		} else {
+			echo '<script>document.getElementById("passErr").style.display = "inline";</script>';
+		}
+	}
+	?>
 </body>
 
 </html>
