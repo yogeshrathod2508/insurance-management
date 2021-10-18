@@ -45,7 +45,14 @@
 			<div class="col-md-7 col-lg-6 ml-auto">
 				<form method="POST">
 					<div class="row">
-
+						<!-- First Name -->
+						<div class="input-group col-lg-6 mb-4">
+							<input id="fname" type="text" name="fname" placeholder="First Name" class="form-control bg-white border-left-0 border-md" required>
+						</div>
+						<!-- Last Name -->
+						<div class="input-group col-lg-6 mb-4">
+							<input id="lname" type="text" name="lname" placeholder="Last Name" class="form-control bg-white border-left-0 border-md" required>
+						</div>
 						<!-- Email Address -->
 						<div class="input-group col-lg-12 mb-4">
 							<input id="email" type="email" name="email" placeholder="Email Address" class="form-control bg-white border-left-0 border-md" required>
@@ -73,7 +80,7 @@
 
 						<!-- Password Confirmation -->
 						<div class="input-group col-lg-6 mb-4">
-							<input id="passwordConfirmation" type="text" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
+							<input id="passwordConfirmation" type="password" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
 						</div>
 
 						<!-- Password Confirmation Error Message -->
@@ -129,7 +136,7 @@
 		if ($_POST["password"] === $_POST["confirm_password"]) {
 			try {
 				require_once '../dbConfig.php';
-				$sql = "Insert Into Clients (Email, Username, Mobile, Password) Values (:email, :username, :mobno, :pass)";
+				$sql = "Insert Into clients (Email, Username, Mobile, Password) Values (:email, :username, :mobno, :pass)";
 				$statement = $dbConnection->prepare($sql);
 				$statement->execute([
 					':email' => $_POST['email'],

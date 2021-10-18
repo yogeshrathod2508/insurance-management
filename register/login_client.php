@@ -1,3 +1,13 @@
+<?php
+// Initialize the session
+session_start();
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+	header("location: ../apply/index.php");
+	exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,12 +118,14 @@
 	if (isset($_POST['submit'])) {
 		try {
 			require_once '../dbConfig.php';
-			$sql = "Select * From Clients Where email = :email";
+			$sql = "Select * From clients Where email = :email";
 			$statement = $dbConnection->prepare($sql);
 			$statement->execute(array(':email' => $_POST['email']));
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			if ($row != NULL) {
 				if ($_POST['password'] == $row['Password']) {
+					$_SESSION["loggedin"] = true;
+					$_SESSION["email"] = $_POST['email'];
 					echo '<script type="text/javascript">location.href = "../apply/index.php";</script>';
 				} else {
 					echo '<script>document.getElementById("passErr").style.display = "inline";</script>';
