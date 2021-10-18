@@ -56,7 +56,9 @@ CREATE TABLE `insurance` (
 CREATE TABLE `clients` (
   `ID` int(11) NOT NULL,
   `Email` varchar(255) NOT NULL,
-	`Username` varchar(255) NOT NULL,
+  `Username` varchar(255) NOT NULL,
+  `Firstname` varchar(255) NOT NULL,
+  `Lastname` varchar(255) NOT NULL,
   `Mobile` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
