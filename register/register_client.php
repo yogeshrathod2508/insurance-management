@@ -1,3 +1,10 @@
+<?php
+ini_set('session.save_path', '../session');
+if (session_id()) {
+	session_unset();
+	session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,17 +25,10 @@
 	<header class="header">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">Insurance Company</a>
+				<a class="navbar-brand" href="#">Ek Ka Double Insurance Company</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<a href="../apply/index.php" class="nav-link">Home</a>
-						</li>
-					</ul>
-				</div>
 			</div>
 		</nav>
 	</header>
@@ -54,6 +54,16 @@
 						<!-- Username -->
 						<div class="input-group col-lg-12 mb-4">
 							<input id="username" type="text" name="username" placeholder="Username" class="form-control bg-white border-left-0 border-md" required>
+						</div>
+
+						<!-- First Name -->
+						<div class="input-group col-lg-12 mb-4">
+							<input id="fname" type="text" name="fname" placeholder="First Name" class="form-control bg-white border-left-0 border-md" required>
+						</div>
+
+						<!-- Last Name -->
+						<div class="input-group col-lg-12 mb-4">
+							<input id="lname" type="text" name="lname" placeholder="Last Name" class="form-control bg-white border-left-0 border-md" required>
 						</div>
 
 						<!-- Phone Number -->
@@ -129,13 +139,15 @@
 		if ($_POST["password"] === $_POST["confirm_password"]) {
 			try {
 				require_once '../dbConfig.php';
-				$sql = "Insert Into Clients (Email, Username, Mobile, Password) Values (:email, :username, :mobno, :pass)";
+				$sql = "Insert Into Clients (Email, Username, Firstname, Lastname, Mobile, Password) Values (:email, :username, :firstname, :lastname, :mobno, :pass)";
 				$statement = $dbConnection->prepare($sql);
 				$statement->execute([
 					':email' => $_POST['email'],
 					':username' => $_POST['username'],
 					':mobno' => $_POST['countryCode'] . " " . $_POST['phone'],
-					':pass' => $_POST['password'],
+					':firstname' => $_POST['fname'],
+					':lastname' => $_POST['lname'],
+					':pass' => $_POST['password']
 				]);
 			} catch (Exception $e) {
 				echo 'Exception :' . $e;
