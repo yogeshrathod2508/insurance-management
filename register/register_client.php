@@ -83,7 +83,7 @@ if (session_id()) {
 
 						<!-- Password Confirmation -->
 						<div class="input-group col-lg-6 mb-4">
-							<input id="passwordConfirmation" type="text" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
+							<input id="passwordConfirmation" type="password" name="confirm_password" placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md" autocomplete="off" required>
 						</div>
 
 						<!-- Password Confirmation Error Message -->

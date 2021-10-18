@@ -13,8 +13,8 @@
 $hostName = "localhost";
 $dbPortNo = 3306;
 $dbUserName = "root";
-$dbPassword = "root";
-$dbName = "insurance_management";
+$dbPassword = "";
+$dbName = "test";
 
 try {
   $dbConnection = new PDO("mysql:host={$hostName};port={$dbPortNo};dbname={$dbName}", $dbUserName, $dbPassword);
